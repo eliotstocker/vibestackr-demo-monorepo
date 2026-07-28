@@ -1,0 +1,29 @@
+[tools]
+python = "3.12"
+node = "20"
+go = "1.25"
+java = "21"
+
+[tasks.setup-admin]
+description = "Install dependencies for Admin Frontend"
+run = "cd 'Admin Frontend' && npm install"
+
+[tasks.setup-go]
+description = "Setup Go service"
+run = "cd 'Go Service' && go mod download"
+
+[tasks.setup-java]
+description = "Setup Java Backend"
+run = "cd 'Java Backend' && ./gradlew build -x test"
+
+[tasks.setup-main]
+description = "Install dependencies for Main Frontend"
+run = "cd 'Main Frontend' && npm install"
+
+[tasks.setup-python]
+description = "Setup Python Thing"
+run = "pip install requests"
+
+[tasks.setup-all]
+description = "Install all dependencies"
+run = "mise run setup-admin && mise run setup-go && mise run setup-java && mise run setup-main && mise run setup-python"

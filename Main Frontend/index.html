@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>main-frontend</title>
+    <link rel="stylesheet" href="./src/style.css">
+  </head>
+  <body class="bg-gray-100 min-h-screen">
+    <header class="p-4 bg-white shadow-sm flex justify-end items-center">
+      <div id="user-dropdown" class="relative inline-block text-left">
+        <button type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
+          Select User
+        </button>
+        <div class="hidden origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 bg-white divide-y divide-gray-100 focus:outline-none" id="user-dropdown-menu" role="menu">
+          <div class="py-1" role="none">
+            <ul id="user-list" class="max-h-64 overflow-y-auto py-1 text-gray-900" role="list">
+              <!-- Users will be populated here -->
+            </ul>
+          </div>
+        </div>
+      </div>
+    </header>
+    <div id="app" class="flex items-center justify-center p-4 mt-10">
+      <div class="bg-white p-8 rounded shadow-md text-center max-w-md w-full">
+        <h1 id="message" class="text-2xl font-bold mb-4 text-gray-800">Connecting to server...</h1>
+        <div id="counter-container" class="mb-4 p-4 bg-blue-50 rounded border border-blue-100 hidden">
+          <p class="text-sm uppercase tracking-wider text-blue-400 font-semibold mb-1">Current Counter</p>
+          <p id="counter-value" class="text-3xl font-extrabold text-blue-600">0</p>
+        </div>
+        <p id="status" class="text-sm text-gray-600"></p>
+      </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
