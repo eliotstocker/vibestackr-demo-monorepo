@@ -56,8 +56,7 @@ function App() {
     try {
       const res = await fetch('http://localhost:6778/admin/increment', { method: 'POST' });
       if (!res.ok) throw new Error('Failed to increment counter');
-      // Note: In a real app, we would fetch the updated counter value here or from the component state
-      fetchPersons(); // Re-fetching won't help with counter, but just to show action
+      fetchPersons(); 
     } catch (err) {
       setError('Failed to increment counter');
     } finally {
@@ -76,6 +75,16 @@ function App() {
       setLoading(false);
     }
   };
+
+  const deletePerson = async (id: number) => {
+    try {
+      const res = await fetch(`${baseUrl}/persons?id=${id}`, { method: 'DELETE' })
+      if (!res.ok) throw new Error('Failed to delete person')
+      fetchPersons()
+      setError(null)
+    } catch (err) {
+      setError('Failed to delete person')
+    }
   }
 
   useEffect(() => {
@@ -83,89 +92,106 @@ function App() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white rounded-xl shadow-lg overflow-hidden p-8 text-center">
-        <h1 className="text-3xl font-bold text-indigo-600 mb-6">Person Manager</h1>
-        
-        <form onSubmit={addPerson} className="mb-8 flex flex-col gap-3 text-left">
-          <div className="flex flex-col gap-1">
-            <label className="text-sm font-semibold text-gray-600">First Name</label>
-            <input
-              type="text"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              className="p-2 border rounded w-full"
-            />
-          </div>
-          <div className="flex flex-col gap-1">
-            <label className="text-sm font-semibold text-gray-600">Last Name</label>
-            <input
-              type="text"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              className="p-2 border rounded w-full"
-            />
-          </div>
-          <button
-            type="submit"
-            disabled={loading}
-            className="mt-2 py-2 px-4 bg-indigo-600 text-white font-semibold rounded hover:bg-indigo-7<0xC2>00 disabled:opacity-50 transition duration-200"
-          >
-            {loading ? 'Adding...' : 'Add Person'}
-          </button>
-        </form>
-
-        <div className="text-left border-t pt-6">
-          <h2 className="text-xl font-bold mb-4 text-gray-800 flex justify-between items-center">
-            All Persons
-            <span className="text-sm font-normal text-gray-500">{persons.length}</span>
-          </h2>
-
-          <div className="flex gap-2 mb-4">
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
+      <div className="max-w-md w-full bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+        {/* Header */}
+        <div className="bg-indigo-600 p-6 text-center">
+          <h1 className="text-2xl font-bold text-white">Person Manager</h1>
+          <p className="text-indigo-100 text-sm mt-1">Manage your person database</p>
+        </div>
+            
+        <div className="p-8">
+          {/* Form Section */}
+          <form onSubmit={addPerson} className="space-y-4 mb-8">
+            <div>
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">First Name</label>
+              <input
+                type="text"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all"
+                placeholder="e.g. John"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Last Name</label>
+              <input
+                type="text"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all"
+                placeholder="e.g. Doe"
+              />
+            </div>
             <button
-              onClick={incrementCounter}
+              type="submit"
               disabled={loading}
-              className="py-1 px-3 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50 text-sm"
+              className="w-full py-3 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700 active:scale-[0.98] disabled:opacity-50 transition-all shadow-md shadow-indigo-200"
             >
-              Increment Counter (Admin)
+              {loading ? 'Adding...' : 'Add Person'}
             </button>
-            <button
-              onClick={resetCounter}
-              disabled={loading}
-              className="py-1 px-3 bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50 text-sm"
-            >
-              Reset Counter (Admin)
-            </button>
-          </div>
+          </form>
 
-          {persons.length === 0 ? (
-            <p className="text-gray-500 italic">No persons found.</p>
-          ) : (
-            <ul className="divide-y divide-gray-200 max-h-64 overflow-y-auto">
-              {persons.map((person) => (
-                <li key={person.id} className="py-3 flex justify-between items-center group">
-                  <span className="text-gray-800">{person.first_name} {person.last_name}</span>
+          <div className="space-y-6">
+            {/* Admin Actions Section */}
+            <div className="pt-6 border-t border-slate-100">
+               <h3 className="text-sm font-bold text-slate-800 mb-3 uppercase tracking-wide">Admin Controls</h3>
+               <div className="grid grid-cols-2 gap-3">
                   <button
-                    onClick={() => deletePerson(person.id)}
-                    className="text-red-500 hover:text-red-700 opacity-0 group-hover:opacity-100 transition duration-200 font-medium"
+                    onClick={incrementCounter}
+                    disabled={loading}
+                    className="py-2 px-3 bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-lg hover:bg-emerald-100 disabled:opacity-50 text-xs font-bold transition-all"
                   >
-                    Delete
+                    Increment
                   </button>
-                </li>
-              ))}
-            </ul>
+                  <button
+                    onClick={resetCounter}
+                    disabled={loading}
+                    className="py-2 px-3 bg-rose-50 text-rose-700 border border-rose-100 rounded-lg hover:bg-rose-100 disabled:opacity-50 text-xs font-bold transition-all"
+                  >
+                    Reset
+                  </button>
+               </div>
+            </div>
+
+            {/* Person List Section */}
+            <div>
+              <div className="flex justify-between items-center mb-3">
+                <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wide">Person Directory</h3>
+                <span className="px-2 py-0.5 bg-slate-100 text-slate-600 text-[10px] font-bold rounded-full">{persons.length}</span>
+              </div>
+
+              {persons.length === 0 ? (
+                <div className="text-center py-8 bg-slate-50 rounded-xl border-2 border-dashed border-slate-200">
+                  <p className="text-slate-400 text-sm italic">No users in database.</p>
+                </div>
+              ) : (
+                <ul className="divide-y divide-slate-100 max-h-60 overflow-y-auto pr-1 custom-scrollbar">
+                  {persons.map((person) => (
+                    <li key={person.id} className="py-3 flex justify-between items-center group">
+                      <span className="text-slate-700 font-medium">{person.first_name} {person.last_name}</span>
+                      <button
+                        onClick={() => deletePerson(person.id)}
+                        className="p-2 text-slate-300 hover:text-rose-500 hover:bg-rose-50 rounded-full transition-all group-hover:opacity-100 opacity-0"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
+
+          {error && (
+            <div className="mt-6 p-3 bg-rose-50 text-rose-700 text-sm rounded-lg border border-rose-100 animate-pulse">
+              {error}
+            </div>
           )}
         </div>
-
-        {error && (
-          <div className="mt-6 p-3 bg-red-100 text-red-700 rounded-md text-sm">
-            {error}
-          </div>
-        )}
       </div>
     </div>
   )
 }
 
 export default App
-

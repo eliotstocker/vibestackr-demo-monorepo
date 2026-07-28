@@ -2,7 +2,7 @@
 
 Instructions for running the demo stack.
 
-## Getting Started
+## Trying things out
 
 1. **Initialize Stack**
    ```bash
@@ -10,11 +10,13 @@ Instructions for running the demo stack.
    ```
 
 2. **Configure Services**
-   Add PostgreSQL Docker container for Go and Python services:
+   Get the config updated to include an interactive shortcut for adding a person to the database
    ```bash
-   npx vibestackr config "add a docker postgres container that the go container and python thing can connect to"
+   npx vibestackr config "add a shortcut that allows entering first and name names to add a person with the python thing script"
    ```
-
-## Troubleshooting
-
-If errors occur in the Go service, consult Claude for debugging support.
+3. **Fix a Bug in the Go Service**
+   get claude to fix whats causing issues in the go service
+   ```bash
+   claude
+   # Can you fix the error thats showing in the go service logs?
+   ```

@@ -23,6 +23,9 @@ dependencies {
 
     // This dependency is used by the application.
     implementation libs.guava
+    implementation libs.javalin
+    implementation 'org.slf4j:slf4j-simple:2.0.7'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -35,6 +38,10 @@ java {
 application {
     // Define the main class for the application.
     mainClass = 'com.vibestackr.App'
+}
+
+tasks.register('bootRun') {
+    dependsOn 'run'
 }
 
 tasks.named('test') {

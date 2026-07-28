@@ -1,3 +1,5 @@
+package com.vibestackr;
+
 import io.javalin.Javalin;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.Map;
@@ -7,20 +9,9 @@ public class App {
 
     public static void main(String[] args) {
         Javalin app = Javalin.create(config -> {
-            config.plugins.add(new io.javalin.http.CorsHandler(cors -> {
-                cors.addMappings(mapping -> {
-                    mapping.addRoute(io.javalin.http.javalin.javalin.HttpMethod.GET, "/**", (ctx) -> {}); // This is not quite right for Javalin 6, let's use the correct way below
-                });
-            }));
+            // No need for complex CORS if we use the before filter for simplicity in dev
         }).start(6778);
 
-        // Correct CORS configuration for Javalin 6
-        app.enableCors(config -> {
-            config.addRule(io.javalin.http.javalin.javalin.HttpMethod.GET, "*", (ctx) -> {});
-            config.addRule(io.javalin.http.javalin.javalin.HttpMethod.POST, "*", (ctx) -> {});
-        });
-
-        // Let's simplify CORS for local dev
         app.before(ctx -> {
             ctx.header("Access-Control-Allow-Origin", "*");
             ctx.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");

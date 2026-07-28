@@ -1,5 +1,21 @@
 import './style.css'
 
+const javaUrl = 'http://localhost:6778'; // Java Backend (Hello/Counter)
+
+async function pollCounter() {
+  const counterValueElement = document.querySelector('#counter-value');
+  try {
+    const res = await fetch(`${javaUrl}/counter`);
+    if (!res.ok) return;
+    const data = await res.json();
+    if (counterValueElement) {
+      counterValueElement.textContent = data.counter.toString();
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 async function fetchFromServer() {
   const messageElement = document.querySelector('#message');
   const statusElement = document.querySelector('#status');
@@ -9,7 +25,6 @@ async function fetchFromServer() {
   const userMenuButton = document.querySelector('#user-menu-button');
   const userDropdownMenu = document.querySelector('#user-dropdown-menu');
 
-  const javaUrl = 'http://localhost:6778'; // Java Backend (Hello/Counter)
   const goUrl = 'http://localhost:8080';   // Go Service (Persons)
 
   if (userMenuButton && userDropdownMenu) {
@@ -22,6 +37,8 @@ async function fetchFromServer() {
       userDropdownMenu.classList.add('hidden');
     });
   }
+
+  const statusBadge = document.querySelector('#status-badge');
 
   try {
     // 1. Fetch Hello Message & Counter from Java Backend (67im:78)
@@ -61,7 +78,8 @@ async function fetchFromServer() {
           li.className = 'block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer';
           li.textContent = `${person.first_name} ${person.last_name}`;
           li.onclick = () => {
-            userMenuButton.textContent = `${person.first_name} ${person.last_name}`;
+            const nameSpan = document.querySelector('#user-name-text');
+            if (nameSpan) nameSpan.textContent = `${person.first_name} ${person.last_name}`;
             userDropdownMenu.classList.add('hidden');
           };
           userList.appendChild(li);
@@ -70,7 +88,10 @@ async function fetchFromServer() {
     }
 
     statusElement.textContent = 'Successfully connected to all services.';
-    statusElement.className = 'text-sm text-green-600';
+    statusElement.className = 'text-sm text-gray-400 font-medium';
+    if (statusBadge) {
+      statusBadge.innerHTML = '<span class="w-2 h-2 mr-2 rounded-full bg-green-500"></span>Connected';
+    }
   } catch (error) {
     console.error(error);
     messageElement.textContent = 'Connection failed';
@@ -78,7 +99,11 @@ async function fetchFromServer() {
       statusElement.textContent = `Error: ${error.message}. Check if services are running at 6778 (Java) and 8080 (Go).`;
       statusElement.className = 'text-sm text-red-600';
     }
+    if (statusBadge) {
+      statusBadge.innerHTML = '<span class="w-2 h-2 mr-2 rounded-full bg-red-500"></span>Error';
+    }
   }
 }
 
 fetchFromServer();
+setInterval(pollCounter, 5000);

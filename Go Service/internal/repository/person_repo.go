@@ -14,7 +14,7 @@ type Person struct {
 type PersonRepository interface {
 	Create(ctx context.Context, person *Person) error
 	List(ctx context.Context) ([]Person, error)
-	Delete(ctx context.string, id int) error
+	Delete(ctx context.Context, id int) error
 }
 
 type postgresRepo struct {
