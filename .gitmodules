@@ -1,0 +1,15 @@
+[submodule "Admin Frontend"]
+	path = Admin Frontend
+	url = https://github.com/eliotstocker/stackr-demo-admin-frontend.git
+[submodule "Go Service"]
+	path = Go Service
+	url = https://github.com/eliotstocker/stackr-demo-go-service.git
+[submodule "Java Backend"]
+	path = Java Backend
+	url = https://github.com/eliotstocker/stackr-demo-java-backend.git
+[submodule "Main Frontend"]
+	path = Main Frontend
+	url = https://github.com/eliotstocker/stackr-demo-main-frontend.git
+[submodule "Python Thing"]
+	path = Python Thing
+	url = https://github.com/eliotstocker/stackr-demo-python-thing.git
